@@ -1,0 +1,6 @@
+name: fldrupal-lando
+recipe: pantheon
+config:
+  framework: drupal8
+  site: fldrupal-lando
+  id: ba6b2339-260a-4e3f-a2d1-de2f4ea6547d
