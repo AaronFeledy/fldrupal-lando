@@ -4,3 +4,28 @@ config:
   framework: drupal8
   site: fldrupal-lando
   id: ba6b2339-260a-4e3f-a2d1-de2f4ea6547d
+
+services:
+  chrome:
+    type: compose
+    services:
+      image: justinribeiro/chrome-headless:stable
+      command: "exec google-chrome --headless --disable-gpu --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222 --no-sandbox > /dev/null 2>&1 &"
+      ports:
+        - "9222:9222"
+      user: chrome
+
+tooling:
+  phpcs:
+    service: appserver
+    cmd: /app/drupal/vendor/bin/phpcs --standard=/app/drupal/phpcs.xml
+  phpcbf:
+    service: appserver
+    cmd: /app/drupal/vendor/bin/phpcbf --standard=/app/drupal/phpcs.xml
+
+  test:
+    service: appserver
+    description: Run PHPUnit tests
+    cmd:
+      - echo && tput setaf 2 && echo "Running PHPUnit tests..." && tput sgr 0
+      - cd /app && ./vendor/bin/phpunit -c phpunit.xml
