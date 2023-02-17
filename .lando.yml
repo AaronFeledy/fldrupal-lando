@@ -6,6 +6,10 @@ config:
   id: ba6b2339-260a-4e3f-a2d1-de2f4ea6547d
 
 services:
+  node:
+    type: node:16
+    globals:
+      gulp-cli: latest
   chrome:
     type: compose
     services:
@@ -24,8 +28,9 @@ tooling:
     cmd: /app/drupal/vendor/bin/phpcbf --standard=/app/drupal/phpcs.xml
 
   test:
-    service: appserver
     description: Run PHPUnit tests
     cmd:
-      - echo && tput setaf 2 && echo "Running PHPUnit tests..." && tput sgr 0
-      - cd /app && ./vendor/bin/phpunit -c phpunit.xml
+      - node: cd /my/theme/path && npm install && npm run build
+      - appserver: echo && tput setaf 2 && echo "Running PHPUnit tests..." && tput sgr 0
+      - appserver: cd /app && ./vendor/bin/phpunit -c phpunit.xml
+

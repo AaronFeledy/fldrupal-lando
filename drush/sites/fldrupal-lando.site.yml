@@ -1,0 +1,10 @@
+'*':
+  host: appserver.${env-name}.ba6b2339-260a-4e3f-a2d1-de2f4ea6547d.drush.in
+  paths:
+    files: files
+  uri: ${env-name}-fldrupal-lando.pantheonsite.io
+  user: ${env-name}.ba6b2339-260a-4e3f-a2d1-de2f4ea6547d
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+

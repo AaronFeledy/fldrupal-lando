@@ -65,3 +65,27 @@ jobs:
         run: |
           cd ./images/${{ matrix.php-versions }}-fpm
           docker build -t devwithlando/php:${{ matrix.php-versions }}-fpm-4 .
+
+      - name: Start Lando
+        run: |
+          lando start
+
+      - name: Auth with Pantheon
+        run: |
+          lando terminus auth:login --machine-token=${{ secrets.PANTHEON_TOKEN }}
+
+      - name: Get Database from Pantheon
+        run: |
+          lando terminus backup:get fldrupal-lando.dev --element=db --to=/app/db.sql.gz
+
+      - name: Import Database
+        run: |
+          lando drush sql:drop -y
+          lando drush sql:cli < /app/db.sql.gz
+
+      - name: Install Drupal
+        run: |
+          lando composer install
+          lando drush deploy -y
+      
+      
